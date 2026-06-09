@@ -1,0 +1,243 @@
+<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  
+  <title>miRNA-Gene Interaction in Alzheimer's</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+
+<div class="container">
+<label for="mirna">Select miRNA:</label>
+<select id="mirna">
+    <option value="">-- Select miRNA --</option>
+            <option value="miRNA-21">miRNA-21</option>
+            <option value="miRNA-29a">miRNA-29a</option>
+            <option value="miRNA-155">miRNA-155</option>
+            <option value="miRNA-146a">miRNA-146a</option>
+            <option value="miRNA-34a">miRNA-34a</option>
+            <option value="miRNA-124">miRNA-124</option>
+            <option value="miRNA-107">miRNA-107</option>
+            <option value="miRNA-9">miRNA-9</option>
+            <option value="miRNA-125b">miRNA-125b</option>
+            <option value="miRNA-210">miRNA-210</option>
+            <option value="miRNA-181">miRNA-181</option>
+            <option value="miRNA-153">miRNA-153</option>
+            <option value="miRNA-137">miRNA-137</option>
+            <option value="miRNA-21">miRNA-21</option>
+</select>
+     <label for="searchBox">Search (miRNA/Gene):</label>
+     <input type="text" id="searchBox" placeholder="Enter miRNA or gene name...">
+     <button onclick="fetchInteractions()">Search</button>
+     <table id="results">
+       <thead>
+         <tr>
+          <th>miRNA</th>
+          <th>Target Gene</th>
+           <th>Interaction Type</th>
+   </tr>
+   </thead>
+   <tbody>
+      <!-- Results will be displayed here -->
+      </tbody>
+   </table>
+  </div>
+<script src="script.js"></script>
+</body>
+</html>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 70px auto;
+    background: white;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 10px rgba(7, 0, 4, 0.1);
+    text-align: center;
+}
+
+h2 { 
+      padding: 10px;
+}
+h3 { 
+      padding: 10px;
+}
+p { 
+      padding: 10px;
+}
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+    font-size: 15px;
+}
+
+select, input, button {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+input {
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #25a536;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+button:hover {
+    background-color: #21565;
+}
+
+table {
+    width: 100%;
+    height: 50%;
+    border-collapse: collapse;
+    margin-top: 40px;
+}
+
+th, td {
+    border: 2px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    table {
+        font-size: 14px;
+    }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.containers {
+    width: 90%;
+    max-width: 600px;
+    margin: 50px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h5 {
+    font-size: 5px;
+    margin-bottom: 20px;
+    
+}
+
+select, {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+@media (max-width: 600px) {
+    button {
+        width: 100%;
+    }
+}
+body { font-family: Arial, sans-serif; }
+        .hero-section { background-color: #4a90e2; color: white; padding: 40px; text-align: center; }
+        .content-section { padding: 20px; }
+        .table-container { overflow-x: auto; }
+        footer { background: #222; color: white; text-align: center; padding: 10px; margin-top: 20px; }
+}
+</style>
+
+<script>
+const interactions = {
+    "miRNA-21": [{ gene: "APP", type: "Downregulation" }, { gene: "BACE1", type: "Inhibition" }],
+    "miRNA-29a": [{ gene: "BACE1", type: "Downregulation" }, { gene: "PSEN1", type: "Downregulation" }],
+    "miRNA-155": [{ gene: "TNF", type: "Upregulation" }, { gene: "CD33", type: "Activation" }],
+    "miRNA-146a": [{ gene: "TREM2", type: "Downregulation" }, { gene: "IRAK1", type: "Downregulation" }],
+    "miRNA-34a": [{ gene: "BCL2", type: "Downregulation" }, { gene: "SIRT1", type: "Inhibition" }],
+    "miRNA-124": [{ gene: "BACE1", type: "Downregulation" }, { gene: "CDK5", type: "Downregulation" }],
+    "miRNA-107": [{ gene: "BACE1", type: "Downregulation" }, { gene: "PICALM", type: "Downregulation" }],
+    "miRNA-9": [{ gene: "REST", type: "Downregulation" }, { gene: "BACE1", type: "Inhibition" }],
+    "miRNA-125b": [{ gene: "CDK5R1", type: "Activation" }, { gene: "Tau (MAPT)", type: "Upregulation" }],
+    "miRNA-210": [{ gene: "BDNF", type: "Downregulation" }, { gene: "VEGF", type: "Downregulation" }],
+    "miRNA-181": [{ gene: "GRIA2", type: "Downregulation" }, { gene: "SIRT1", type: "Inhibition" }],
+    "miRNA-153": [{ gene: "APP", type: "Downregulation" }, { gene: "SNCA", type: "Suppression" }],
+    "miRNA-137": [{ gene: "Cdk6", type: "Downregulation" }, { gene: "MAPT", type: "Inhibition" }],
+    "miRNA-21": [{ gene: "APP", type: "Downregulation" }, { gene: "BACE1", type: "Inhibition" }]
+};
+
+function fetchInteractions() {
+    const mirna = document.getElementById("mirna").value.trim();
+    const searchQuery = document.getElementById("searchBox").value.trim().toLowerCase();
+    const resultsTable = document.querySelector("#results tbody");
+    resultsTable.innerHTML = ""; // Clear previous results
+    let foundResults = [];
+    
+    if (mirna) {
+        foundResults = interactions[mirna] || [];
+    } else if (searchQuery) {
+        for (let key in interactions) {
+            interactions[key].forEach(interaction => {
+                if (key.toLowerCase().includes(searchQuery) || interaction.gene.toLowerCase().includes(searchQuery)) {
+                    foundResults.push({ miRNA: key, gene: interaction.gene, type: interaction.type });
+                }
+            });
+        }
+    }
+
+    if (foundResults.length > 0) {
+        foundResults.forEach(interaction => {
+            let row = `<tr>
+                        <td>${interaction.miRNA || mirna}</td>
+                        <td>${interaction.gene}</td>
+                        <td>${interaction.type}</td>
+                    </tr>`;
+            resultsTable.innerHTML += row;
+        });
+    } else {
+        resultsTable.innerHTML = `<tr><td colspan="3">No interactions found</td></tr>`;
+    }
+document.getElementById("contactForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("emailSelect").value;
+    const message = document.getElementById("message").value.trim();
+
+    if (email === "") {
+        alert("Please select an email address.");
+    } else {
+        alert(`Message sent successfully to {email}`);
+        
+    }
+});
+
+}
+</script>
