@@ -1,4 +1,4 @@
- A web-based bioinformatics database containing:
+ #A web-based bioinformatics database containing:
  Alzheimer's disease information
  Symptoms
  Diagnosis 
